@@ -1,0 +1,94 @@
+﻿@model IEnumerable<CakeShop.Models.ViewModels.Pages.PageVM>
+
+@{
+    ViewBag.Title = "Страницы";
+}
+
+<h2>Страницы</h2>
+
+<p>
+    @Html.ActionLink("Добавить новую страницу", "AddPage")
+</p>
+<!--Если модель пустая -->
+@if (!Model.Any())
+{
+    <h1 class="text-center">Не создано ни одной страницы</h1>
+
+}
+else
+{
+
+    <table class="table sorting" id="pages" >
+        <tr class="home">
+            <th>
+                Название
+            </th>
+            <th>
+                Код
+            </th>
+            <th>
+                Навигация
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr id="id_@item.id" class="@item.Slug">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Slug)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasSidebar)
+                </td>
+                <td>
+                    @Html.ActionLink("Редактировать", "EditPage", new { id = item.id }) |
+                    @Html.ActionLink("Подробнее", "PageDetails", new { id = item.id }) |
+                    @if (item.Slug != "home")
+                    {
+                        @Html.ActionLink("Удалить страницу", "DeletePage", new { id = item.id }, new { @class = "delete" })
+                    }
+
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+
+@section Scripts{
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+    <script>
+
+
+        $(function () {
+            $("a.delete").click(function () {
+                if (!confirm("Вы действительно желаете удалить страницу?")) return false;
+            });
+            ////////////////////////////////////////////////////
+
+            $("table#pages tbody").sortable({
+                items: "tr:not(.home)",
+                placeholder: "ui-state-highlight",
+                update: function () {
+                    var ids = $("table#pages tbody").sortable("serialize");
+                    var url = "/Admin/Pages/ReorderPages";
+
+                    $.post(url, ids, function (data) {
+
+                    });
+                }
+
+            });
+
+            ////////////////////////////////////////////////////
+        });
+
+    </script>
+
+}
