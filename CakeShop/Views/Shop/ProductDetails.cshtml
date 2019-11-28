@@ -1,0 +1,33 @@
+﻿@model CakeShop.Models.ViewModels.Shop.ProductVM
+
+@{
+    ViewBag.Title = @Model.Name;
+}
+
+<h2>Информация о товаре - @Model.Name</h2>
+<br />
+<div class="row">
+
+    <div class="col-xs-12 col-md-4">
+        <img src="/Images/Uploads/Products/@Model.Id/Thumbs/@Model.ImageName" />
+    </div>
+
+    <div class="col-xs-12 col-md-8">
+        @Html.DisplayFor(model => model.Description)
+        <br />
+        $@Html.DisplayFor(model => model.Price)
+        <br />
+
+            <div class="addtocart">
+                <a href="#" class="addtocart">Добавить в корзину</a>
+                <span class="loader">
+                    <img src="~/Content/img/ajax-loader.gif" />
+                </span>
+                <span class="ajaxmsg">Продукт добавлен в корзину</span>
+            </div>
+
+    </div>
+
+</div>
+
+<hr />

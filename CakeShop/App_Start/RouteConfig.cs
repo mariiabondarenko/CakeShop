@@ -13,11 +13,16 @@ namespace CakeShop
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
+            routes.MapRoute("Shop", "Shop/{action}/{name}", new { controller = "Shop", action = "Index", name = UrlParameter.Optional }, new[] { "CakeShop.Controllers" });
+            routes.MapRoute("SidebarPartial", "Pages/SidebarPartial", new { controller = "Pages", action = "SidebarPartial" }, new[] { "CakeShop.Controllers" });
+            routes.MapRoute("PagesMenuPartial", "Pages/PagesMenuPartial", new { controller = "Pages", action = "PagesMenuPartial" }, new[] { "CakeShop.Controllers"});
+            routes.MapRoute("Pages", "{page}", new { controller = "Pages", action = "Index" }, new[] { "CakeShop.Controllers" });
+            routes.MapRoute("Default", "", new { controller = "Pages", action = "Index" }, new[] { "CakeShop.Controllers" });
+            /*routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+            );*/
         }
     }
 }
