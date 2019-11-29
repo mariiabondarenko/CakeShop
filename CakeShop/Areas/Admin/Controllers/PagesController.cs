@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace CakeShop.Areas.Admin.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class PagesController : Controller
     {
         // GET: Admin/Pages
