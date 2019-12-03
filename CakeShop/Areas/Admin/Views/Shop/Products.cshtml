@@ -33,16 +33,16 @@
 <table class="table">
     <tr>
         <th>
-            Name
+            Название
         </th>
         <th>
-            Description
+            Описание
         </th>
         <th>
-            Price
+            Цена
         </th>
         <th>
-            Image Name
+            Изображение
         </th>
         <th></th>
     </tr>
@@ -65,8 +65,8 @@
                 </a>
             </td>
             <td>
-                @Html.ActionLink("Edit", "EditProduct", new { id = product.Id }) |
-                @Html.ActionLink("Delete", "DeleteProduct", new { id = product.Id }, new { @class = "delete" })
+                @Html.ActionLink("Редактировать", "EditProduct", new { id = product.Id }) |
+                @Html.ActionLink("Удалить", "DeleteProduct", new { id = product.Id }, new { @class = "delete" })
             </td>
         </tr>
     }

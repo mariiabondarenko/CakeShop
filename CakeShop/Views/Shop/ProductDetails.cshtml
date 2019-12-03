@@ -18,15 +18,17 @@
         $@Html.DisplayFor(model => model.Price)
         <br />
 
-        <div class="addtocart">
-            <a href="#" class="addtocart">Добавить в корзину</a>
-            <span class="loader">
-                <img src="~/Content/img/ajax-loader.gif" />
-            </span>
-            <span class="ajaxmsg">Продукт добавлен в корзину</span>
+        @if (Request.IsAuthenticated)
+        {
+            <div class="addtocart">
+                <a href="#" class="addtocart">Добавить в корзину</a>
+                <span class="loader">
+                    <img src="~/Content/img/ajax-loader.gif" />
+                </span>
+                <span class="ajaxmsg">Продукт добавлен в корзину</span>
+            </div>
+        }
         </div>
-
-    </div>
 
 </div>
 

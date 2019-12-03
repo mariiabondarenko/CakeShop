@@ -1,10 +1,10 @@
 ﻿@model CakeShop.Models.ViewModels.Pages.PageVM
 
 @{
-    ViewBag.Title = "Page Details";
+    ViewBag.Title = "Подробнее о странице";
 }
 
-<h2>PageDetails</h2>
+    <h2>Подробнее о странице</h2>
 
 <div>
     <hr />
@@ -35,6 +35,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "EditPage", new { id = Model.id }) |
+    @Html.ActionLink("Редактировать страницу", "EditPage", new { id = Model.id }) |
     @Html.ActionLink("Вернутся к списку страниц", "Index")
 </p>
