@@ -1,49 +1,4 @@
-﻿/*body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
-
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-
-.dl-horizontal dt {
-    white-space: normal;
-}
-
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
-table.sorting tr:not(.home) {
-    cursor: pointer;
-}
-
-.ui-state-highlight {
-    border: 1px dashed #ccc;
-}
-
-div.new-cat{
-    margin-top: 30px;
-    position: relative;
-}
-
-span.ajax-text {
-    display: none;
-}
-
-table.sorting.categories td {
-    padding: 15px !important;
-}
-
-.ajaxdivtd{
-    position: absolute;
-}*/
-
+﻿
 table.sorting tr:not(.home) {
     cursor: pointer;
 }
@@ -119,3 +74,9 @@ form.paypalform {
 .row {
     position: relative;
 }
+
+.logo img{
+    padding: 0em;
+}
+
+
