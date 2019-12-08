@@ -71,7 +71,7 @@
         </tr>
     }
 
-</table>>
+</table>
 
 
 @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("Products", new { page, catId = ViewBag.SelectedCat }))

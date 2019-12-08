@@ -70,13 +70,17 @@ form.paypalform {
     position: absolute;
     left: -2000px;
 }
-
+/*
 .row {
     position: relative;
-}
+}*/
 
 .logo img{
     padding: 0em;
 }
 
+.cards1 {
+    font-size: 16px;
+    
+}
 

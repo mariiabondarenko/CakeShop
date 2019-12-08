@@ -21,7 +21,7 @@ namespace CakeShop.Controllers
             // Check if cart is empty
             if (cart.Count == 0 || Session["cart"] == null)
             {
-                ViewBag.Message = "Your cart is empty.";
+                ViewBag.Message = "Корзина пуста!";
                 return View();
             }
 
