@@ -21,14 +21,10 @@ namespace CakeShop.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            // Confirm user is not logged in
-
             string username = User.Identity.Name;
 
             if (!string.IsNullOrEmpty(username))
                 return RedirectToAction("user-profile");
-
-            // Return view
             return View();
         }
 
@@ -37,13 +33,10 @@ namespace CakeShop.Controllers
         [HttpPost]
         public ActionResult Login(LoginUserVM model)
         {
-            // Check model state
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
-            // Check if the user is valid
 
             bool isValid = false;
 
@@ -57,7 +50,7 @@ namespace CakeShop.Controllers
 
             if (!isValid)
             {
-                ModelState.AddModelError("", "Invalid username or password.");
+                ModelState.AddModelError("", "Неправильный логин или пароль!");
                 return View(model);
             }
             else
@@ -82,30 +75,26 @@ namespace CakeShop.Controllers
         [HttpPost]
         public ActionResult CreateAccount(UserVM model)
         {
-            // Check model state
             if (!ModelState.IsValid)
             {
                 return View("CreateAccount", model);
             }
 
-            // Check if passwords match
             if (!model.Password.Equals(model.ConfirmPassword))
             {
-                ModelState.AddModelError("", "Passwords do not match.");
+                ModelState.AddModelError("", "Пароли не совпадают.");
                 return View("CreateAccount", model);
             }
 
             using (Db db = new Db())
             {
-                // Make sure username is unique
                 if (db.Users.Any(x => x.Username.Equals(model.Username)))
                 {
-                    ModelState.AddModelError("", "Username " + model.Username + " is taken.");
+                    ModelState.AddModelError("", "Никнейм" + model.Username + " уже занят.");
                     model.Username = "";
                     return View("CreateAccount", model);
                 }
 
-                // Create userDTO
                 UserDTO userDTO = new UserDTO()
                 {
                     FirstName = model.FirstName,
@@ -115,13 +104,10 @@ namespace CakeShop.Controllers
                     Password = model.Password
                 };
 
-                // Add the DTO
                 db.Users.Add(userDTO);
 
-                // Save
                 db.SaveChanges();
 
-                // Add to UserRolesDTO
                 int id = userDTO.Id;
 
                 UserRoleDTO userRolesDTO = new UserRoleDTO()
@@ -134,10 +120,8 @@ namespace CakeShop.Controllers
                 db.SaveChanges();
             }
 
-            // Create a TempData message
-            TempData["SM"] = "You are now registered and can login.";
+            TempData["SM"] = "Вы успешно зарегестрированы!";
 
-            // Redirect
             return Redirect("~/account/login");
         }
 
@@ -152,26 +136,20 @@ namespace CakeShop.Controllers
         [Authorize]
         public ActionResult UserNavPartial()
         {
-            // Get username
             string username = User.Identity.Name;
 
-            // Declare model
             UserNavPartialVM model;
 
             using (Db db = new Db())
             {
-                // Get the user
                 UserDTO dto = db.Users.FirstOrDefault(x => x.Username == username);
 
-                // Build the model
                 model = new UserNavPartialVM()
                 {
                     FirstName = dto.FirstName,
                     LastName = dto.LastName
                 };
             }
-
-            // Return partial view with model
             return PartialView(model);
         }
 
@@ -181,22 +159,15 @@ namespace CakeShop.Controllers
         [Authorize]
         public ActionResult UserProfile()
         {
-            // Get username
             string username = User.Identity.Name;
 
-            // Declare model
             UserProfileVM model;
 
             using (Db db = new Db())
             {
-                // Get user
                 UserDTO dto = db.Users.FirstOrDefault(x => x.Username == username);
-
-                // Build model
                 model = new UserProfileVM(dto);
             }
-
-            // Return view with model
             return View("UserProfile", model);
         }
 
@@ -206,36 +177,30 @@ namespace CakeShop.Controllers
         [Authorize]
         public ActionResult UserProfile(UserProfileVM model)
         {
-            // Check model state
             if (!ModelState.IsValid)
             {
                 return View("UserProfile", model);
             }
 
-            // Check if passwords match if need be
             if (!string.IsNullOrWhiteSpace(model.Password))
             {
                 if (!model.Password.Equals(model.ConfirmPassword))
                 {
-                    ModelState.AddModelError("", "Passwords do not match.");
+                    ModelState.AddModelError("", "Пароли не совпадают.");
                     return View("UserProfile", model);
                 }
             }
 
             using (Db db = new Db())
             {
-                // Get username
                 string username = User.Identity.Name;
-
-                // Make sure username is unique
                 if (db.Users.Where(x => x.Id != model.Id).Any(x => x.Username == username))
                 {
-                    ModelState.AddModelError("", "Username " + model.Username + " already exists.");
+                    ModelState.AddModelError("", "Никнейм " + model.Username + " уже существует.");
                     model.Username = "";
                     return View("UserProfile", model);
                 }
 
-                // Edit DTO
                 UserDTO dto = db.Users.Find(model.Id);
 
                 dto.FirstName = model.FirstName;
@@ -247,20 +212,13 @@ namespace CakeShop.Controllers
                 {
                     dto.Password = model.Password;
                 }
-
-                // Save
                 db.SaveChanges();
             }
 
-            // Set TempData message
-            TempData["SM"] = "You have edited your profile!";
+            TempData["SM"] = "Вы успешно отредактировали ваш профиль!";
 
-            // Redirect
             return Redirect("~/account/user-profile");
         }
-
-
-
 
     }
 }

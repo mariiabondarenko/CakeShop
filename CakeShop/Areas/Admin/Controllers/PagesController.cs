@@ -14,19 +14,13 @@ namespace CakeShop.Areas.Admin.Controllers
         // GET: Admin/Pages
         public ActionResult Index()
         {
-            //Declare list og PageVM
             List<PageVM> pagesList;
-
-            
+   
             using (Db db = new Db())
             {
-                //Init the list
                 pagesList = db.Pages.ToArray().OrderBy(x => x.Sorting).Select(x => new PageVM(x)).ToList();
 
             }
-
-
-            //Return view with list
             return View(pagesList);
         }
 
@@ -42,7 +36,6 @@ namespace CakeShop.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult AddPage(PageVM model)
         {
-            //Проверка состояния модели
             if(!ModelState.IsValid)
             {
                 return View(model);
@@ -50,17 +43,12 @@ namespace CakeShop.Areas.Admin.Controllers
 
             using (Db db = new Db())
             {
-                //Обьявление
+
                 string slug;
-
-                //Инициализация
                 PageDTO dto = new PageDTO();
-
-                //DTO title
                 dto.Title = model.Title;
 
 
-                //Проверки slug-a
                 if (string.IsNullOrWhiteSpace(model.Slug))
                 {
                     slug = model.Title.Replace(" ", "-").ToLower();
@@ -81,15 +69,12 @@ namespace CakeShop.Areas.Admin.Controllers
                 dto.HasSidebar = model.HasSidebar;
                 dto.Sorting = 100;
 
-                //Сохранение
                 db.Pages.Add(dto);
                 db.SaveChanges();
             }
 
-            //Set TempData message
             TempData["SM"] = "Вы добавили новую страницу";
 
-            //Redirect
             return RedirectToAction("AddPage");
         }
 
@@ -99,7 +84,6 @@ namespace CakeShop.Areas.Admin.Controllers
         {
             PageVM model;
 
-
             using (Db db = new Db())
             {
                 PageDTO dto = db.Pages.Find(id);
@@ -108,12 +92,9 @@ namespace CakeShop.Areas.Admin.Controllers
                 {
                     return Content("Страницы не существует");
                 }
-
                 model = new PageVM(dto);
 
             }
-
-
                 return View(model);
         }
 
@@ -122,7 +103,7 @@ namespace CakeShop.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult EditPage(PageVM model)
         {
-            //Проверка состояния модели
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -136,11 +117,8 @@ namespace CakeShop.Areas.Admin.Controllers
 
                 PageDTO dto = db.Pages.Find(id);
 
-
                 dto.Title = model.Title;
 
-
-                //Проверки slug-a
                 if (model.Slug != "home")
                 {
                     if (string.IsNullOrWhiteSpace(model.Slug))
@@ -167,10 +145,9 @@ namespace CakeShop.Areas.Admin.Controllers
                 db.SaveChanges();
             }
 
-            //Set TempData message
+ 
             TempData["SM"] = "Вы добавили изменили страницу";
 
-            //Redirect
             return RedirectToAction("EditPage");
 
         }
@@ -191,9 +168,7 @@ namespace CakeShop.Areas.Admin.Controllers
                 }
 
                 model = new PageVM(dto);
-
             }
-
 
             return View(model);
         }
@@ -221,13 +196,9 @@ namespace CakeShop.Areas.Admin.Controllers
 
             using (Db db = new Db())
             {
-                //Set initial count
+
                 int count = 1;
-
-                //Declare DTO
                 PageDTO dto;
-
-                //Set sorting for each page
                 foreach (var pageId in id)
                 {
                     dto = db.Pages.Find(pageId);
@@ -247,21 +218,16 @@ namespace CakeShop.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult EditSidebar()
         {
-            //Declare model
+
             SidebarVM model;
 
             using (Db db = new Db())
             {
-                //Get the DTO
-                SidebarDTO dto = db.Sidebar.Find(1);
 
-                //Init model
+                SidebarDTO dto = db.Sidebar.Find(1);
                 model = new SidebarVM(dto);
             }
-                
-
-                //Return view with model
-
+ 
                 return View(model);
         }
 
@@ -271,27 +237,18 @@ namespace CakeShop.Areas.Admin.Controllers
         {
             using (Db db = new Db())
             {
-                //Get the DTO
-                SidebarDTO dto = db.Sidebar.Find(1);
-
-                //DTO the body 
+    
+                SidebarDTO dto = db.Sidebar.Find(1); 
                 dto.Body = model.Body;
 
-                //Save
                 db.SaveChanges();
 
             }
 
-            //Set TempData message
             TempData["SM"] = "Вы изменили навигацию сайта!";
 
-
-
-            //Redirect
             return RedirectToAction("EditSidebar");
         }
-
-
 
     }
 }

@@ -15,7 +15,7 @@
                 <img src="/Images/Uploads/Products/@item.Id/Thumbs/@item.ImageName" width="130" height="100"class="rounded mx-auto d-block" alt="...">
                 <div class="card-body">
                     <h5 class="card-title"><i>@Html.DisplayFor(modelItem => item.Name)</i></h5>
-                    <p class="card-text" style="font-size: 12px;">Цена: $@Html.DisplayFor(modelItem => item.Price)</p>
+                    <p class="card-text" style="font-size: 12px;">Цена: @Html.DisplayFor(modelItem => item.Price)</p>
                     <a href="/shop/product-details/@item.Slug" type="button" class="btn btn-info">Подробнее</a>
                 </div>
             </div>

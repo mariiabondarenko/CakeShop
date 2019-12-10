@@ -1,7 +1,7 @@
 ﻿@model CakeShop.Models.ViewModels.Cart.CartVM
 
     <div class="ajaxcart" style="color:white;">
-        Всего: @Model.Quantity товаров - $@Model.Price
+        Всего: @Model.Quantity товаров - @Model.Price
         <br />
         @Html.ActionLink("Корзина", "Index")
     </div>

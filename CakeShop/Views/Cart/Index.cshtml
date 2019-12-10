@@ -4,7 +4,7 @@
     ViewBag.Title = "Корзина";
 }
 
-<h2>Коризна</h2>
+<h2>Корзина</h2>
 
 @if (ViewBag.Message != null)
 {
@@ -61,7 +61,7 @@ else
                     <a href="#" class="removeproduct" data-id="@item.ProductId">Удалить</a>
                 </td>
                 <td class="total@(item.ProductId)">
-                    $@Html.DisplayFor(modelItem => item.Total)
+                    @Html.DisplayFor(modelItem => item.Total)
                 </td>
                 <td>
                 </td>
@@ -75,7 +75,7 @@ else
             <td></td>
             <td></td>
             <td></td>
-            <td class="grandtotal"><b>Grand total</b> $<span>@ViewBag.GrandTotal</span></td>
+            <td class="grandtotal"><b>Общая сумма</b> <span>@ViewBag.GrandTotal</span></td>
 
         </tr>
 

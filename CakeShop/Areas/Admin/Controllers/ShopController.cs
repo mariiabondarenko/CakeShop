@@ -17,21 +17,16 @@ namespace CakeShop.Areas.Admin.Controllers
         // GET: Admin/Shop/Categories
         public ActionResult Categories()
         {
-            //Declare list of model
             List<CategoryVM> categoryVMlist;
 
             using (Db db = new Db())
             {
-                //Init the list
                 categoryVMlist = db.Categories
                                     .ToArray()
                                     .OrderBy(x => x.Sorting)
                                     .Select(x => new CategoryVM(x))
                                     .ToList();
             }
-
-
-            //Retirn the view with the list
             return View(categoryVMlist);
         }
 
@@ -51,10 +46,8 @@ namespace CakeShop.Areas.Admin.Controllers
                 dto.Name = catName;
                 dto.Slug = catName.Replace(" ", "-").ToLower();
                 dto.Sorting = 100;
-
                 db.Categories.Add(dto);
                 db.SaveChanges();
-
                 id = dto.Id.ToString();
 
             }
@@ -70,13 +63,10 @@ namespace CakeShop.Areas.Admin.Controllers
 
             using (Db db = new Db())
             {
-                //Set initial count
-                int count = 1;
 
-                //Declare DTO
+                int count = 1;
                 CategoryDTO dto;
 
-                //Set sorting for each category
                 foreach (var catId in id)
                 {
                     dto = db.Categories.Find(catId);
@@ -86,9 +76,7 @@ namespace CakeShop.Areas.Admin.Controllers
 
                     count++;
                 }
-
             }
-
 
         }
 
@@ -146,7 +134,6 @@ namespace CakeShop.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult AddProduct(ProductVM model, HttpPostedFileBase file)
         {
-            // Check model state
             if (!ModelState.IsValid)
             {
                 using (Db db = new Db())
@@ -156,7 +143,6 @@ namespace CakeShop.Areas.Admin.Controllers
                 }
             }
 
-            // Make sure product name is unique
             using (Db db = new Db())
             {
                 if (db.Products.Any(x => x.Name == model.Name))
@@ -167,10 +153,8 @@ namespace CakeShop.Areas.Admin.Controllers
                 }
             }
 
-            // Declare product id
             int id;
 
-            // Init and save productDTO
             using (Db db = new Db())
             {
                 ProductDTO product = new ProductDTO();
@@ -187,11 +171,9 @@ namespace CakeShop.Areas.Admin.Controllers
                 db.Products.Add(product);
                 db.SaveChanges();
 
-                // Get the id
                 id = product.Id;
             }
 
-            // Set TempData message
             TempData["SM"] = "Товар успешно добавлен!";
 
             #region Upload Image
@@ -253,7 +235,6 @@ namespace CakeShop.Areas.Admin.Controllers
 
                     db.SaveChanges();
                 }
-
                 // Set original and thumb image paths
                 var path = string.Format("{0}\\{1}", pathString2, imageName);
                 var path2 = string.Format("{0}\\{1}", pathString3, imageName);
@@ -269,7 +250,6 @@ namespace CakeShop.Areas.Admin.Controllers
 
             #endregion
 
-            // Redirect
             return RedirectToAction("AddProduct");
         }
 
@@ -288,18 +268,13 @@ namespace CakeShop.Areas.Admin.Controllers
                     .ToList();
 
                 ViewBag.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
-
                 ViewBag.SelectedCat = catId.ToString();
-
             }
 
             var onePageOfProducts = listOfProductVM.ToPagedList(pageNumber, 3);
             ViewBag.OnePageOfProducts = onePageOfProducts;
 
             return View(listOfProductVM);
-
-
-
         }
 
         //GET: Admin/Shop/EditProducts/id
@@ -321,10 +296,7 @@ namespace CakeShop.Areas.Admin.Controllers
 
                 model.GalleryImages = Directory.EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/" + id + "/Gallery/Thumbs"))
                                                 .Select(fn => Path.GetFileName(fn));
-
-
             }
-
                 return View(model);
         }
 
@@ -449,7 +421,6 @@ namespace CakeShop.Areas.Admin.Controllers
         // GET: Admin/Shop/DeleteProduct/id
         public ActionResult DeleteProduct(int id)
         {
-            // Delete product from DB
             using (Db db = new Db())
             {
                 ProductDTO dto = db.Products.Find(id);
@@ -458,79 +429,14 @@ namespace CakeShop.Areas.Admin.Controllers
                 db.SaveChanges();
             }
 
-            // Delete product folder
             var originalDirectory = new DirectoryInfo(string.Format("{0}Images\\Uploads", Server.MapPath(@"\")));
             string pathString = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString());
 
             if (Directory.Exists(pathString))
                 Directory.Delete(pathString, true);
 
-            // Redirect
             return RedirectToAction("Products");
-        }
-
-        /*
-        // GET: Admin/Shop/Orders
-        public ActionResult Orders()
-        {
-            // Init list of OrdersForAdminVM
-            List<OrdersForAdminVM> ordersForAdmin = new List<OrdersForAdminVM>();
-
-            using (Db db = new Db())
-            {
-                // Init list of OrderVM
-                List<OrderVM> orders = db.Orders.ToArray().Select(x => new OrderVM(x)).ToList();
-
-                // Loop through list of OrderVM
-                foreach (var order in orders)
-                {
-                    // Init product dict
-                    Dictionary<string, int> productsAndQty = new Dictionary<string, int>();
-
-                    // Declare total
-                    decimal total = 0m;
-
-                    // Init list of OrderDetailsDTO
-                    List<OrderDetailsDTO> orderDetailsList = db.OrderDetails.Where(X => X.OrderId == order.OrderId).ToList();
-
-                    // Get username
-                    UserDTO user = db.Users.Where(x => x.Id == order.UserId).FirstOrDefault();
-                    string username = user.Username;
-
-                    // Loop through list of OrderDetailsDTO
-                    foreach (var orderDetails in orderDetailsList)
-                    {
-                        // Get product
-                        ProductDTO product = db.Products.Where(x => x.Id == orderDetails.ProductId).FirstOrDefault();
-
-                        // Get product price
-                        decimal price = product.Price;
-
-                        // Get product name
-                        string productName = product.Name;
-
-                        // Add to product dict
-                        productsAndQty.Add(productName, orderDetails.Quantity);
-
-                        // Get total
-                        total += orderDetails.Quantity * price;
-                    }
-
-                    // Add to ordersForAdminVM list
-                    ordersForAdmin.Add(new OrdersForAdminVM()
-                    {
-                        OrderNumber = order.OrderId,
-                        Username = username,
-                        Total = total,
-                        ProductsAndQty = productsAndQty,
-                        CreatedAt = order.CreatedAt
-                    });
-                }
-            }
-
-            // Return view with OrdersForAdminVM list
-            return View(ordersForAdmin);
-        }*/
+        } 
 
     }
 }
